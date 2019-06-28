@@ -11,6 +11,9 @@ import cv2
 import imutils
 import time
 
+
+font = cv2.FONT_HERSHEY_SIMPLEX
+
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video",
@@ -22,8 +25,8 @@ args = vars(ap.parse_args())
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
-greenLower = (29, 86, 6)
-greenUpper = (64, 255, 255)
+greenLower = (9, 130, 132)
+greenUpper = (51, 255, 255)
 pts = deque(maxlen=args["buffer"])
 
 # if a video path was not supplied, grab the reference
@@ -86,7 +89,7 @@ while True:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
 			cv2.circle(frame, (int(x), int(y)), int(radius),
-				(0, 255, 255), 2)
+				(0,255,0), 2)
 			cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
 	# update the points queue
@@ -102,11 +105,17 @@ while True:
 		# otherwise, compute the thickness of the line and
 		# draw the connecting lines
 		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
+		if pts[i] < (300,220):
+			cv2.putText(frame,str('Right'), (3, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+		elif pts[i] > (300,220):
+			cv2.putText(frame,str('Left'), (3, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 		cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
+
 
 	# show the frame to our screen
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
+
 
 	# if the 'q' key is pressed, stop the loop
 	if key == ord("q"):
@@ -122,3 +131,5 @@ else:
 
 # close all windows
 cv2.destroyAllWindows()
+print(pts)
+print(pts[i])
