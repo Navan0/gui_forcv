@@ -11,6 +11,8 @@ import cv2
 import imutils
 import time
 
+face_cascade = cv2.CascadeClassifier('/home/navaneeth/work/gui_forcv/haarcascade_frontalface_default.xml')
+eye_cascade = cv2.CascadeClassifier('/home/navaneeth/work/gui_forcv/haarcascade_eye.xml')
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 
@@ -59,6 +61,7 @@ while True:
 	frame = imutils.resize(frame, width=600)
 	blurred = cv2.GaussianBlur(frame, (11, 11), 0)
 	hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
 	# construct a mask for the color "green", then perform
 	# a series of dilations and erosions to remove any small
@@ -106,10 +109,19 @@ while True:
 		# draw the connecting lines
 		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
 		if pts[i] < (300,220):
-			cv2.putText(frame,str('Right'), (3, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+			cv2.putText(frame,str('Right'), (550, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 		elif pts[i] > (300,220):
 			cv2.putText(frame,str('Left'), (3, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 		cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
+
+	faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+	for (x,y,w,h) in faces:
+		cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
+		roi_gray = gray[y:y+h, x:x+w]
+		roi_color = frame[y:y+h, x:x+w]
+		eyes = eye_cascade.detectMultiScale(roi_gray)
+		for (ex,ey,ew,eh) in eyes:
+			cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
 
 
 	# show the frame to our screen
