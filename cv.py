@@ -1,26 +1,38 @@
+#!/usr/bin/env python
 from collections import deque
 from imutils.video import VideoStream
 import numpy as np
 import cv2
 import imutils
 import time
+# from camera import VideoCamera
 
 face_cascade = cv2.CascadeClassifier('/home/navaneeth/work/gui_forcv/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('/home/navaneeth/work/gui_forcv/haarcascade_eye.xml')
 
 font = cv2.FONT_HERSHEY_SIMPLEX
-buffer = 100
+buffer = 5
 
 greenLower = (9, 130, 132)
 greenUpper = (51, 255, 255)
 pts = deque(maxlen=buffer)
 
 vs = VideoStream(src=0).start()
-
+# vs =
+# frame = VideoCamera()
+# frame0, frame = frame.get_frame()
+# frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
+# frame = imutils.resize(frame, width=600)
 time.sleep(2.0)
 
 while True:
+
+    # cv2.imwrite("Frame.png", frame)
+
+    # frame = frame.write(frame.tofile())
+    #frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
     frame = vs.read()
+    cv2.imwrite("Frame.png", frame)
     if frame is None:
         break
     frame = imutils.resize(frame, width=600)
@@ -72,10 +84,12 @@ while True:
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(1) & 0xFF
 
+
     if key == ord("q"):
         break
 
 
-cv2.destroyAllWindows()
-print(pts)
-print(pts[i])
+def sent_frame():
+    # return frame
+
+    cv2.destroyAllWindows()
