@@ -24,4 +24,5 @@ class VideoCamera(object):
             for (ex, ey, ew, eh) in eyes:
                 cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
         ret, jpeg = cv2.imencode('.png', frame)
-        return (jpeg.tobytes(), jpeg)
+        ret1, jpeg1 = cv2.imencode('.png', gray)
+        return (jpeg.tobytes(), jpeg1.tobytes())
