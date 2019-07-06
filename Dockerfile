@@ -1,4 +1,4 @@
-FROM python:3
+FROM ubuntu:16.04
 MAINTAINER  Navaneeth "nktclt@gmail.com"
 RUN apt-get update -y
 RUN apt-get install -y python3-pip python3-dev build-essential

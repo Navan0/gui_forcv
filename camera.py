@@ -8,12 +8,12 @@ from imutils.video import VideoStream
 
 class VideoCamera(object):
     def __init__(self):
-        self.video = VideoStream(src=0).start()
+        self.video = cv2.VideoCapture(0, cv2.CAP_V4L)
 
     def get_frame(self):
         face_cascade = cv2.CascadeClassifier('/home/navaneeth/work/gui_forcv/haarcascade_frontalface_default.xml')
         eye_cascade = cv2.CascadeClassifier('/home/navaneeth/work/gui_forcv/haarcascade_eye.xml')
-        frame = self.video.read()
+        ret, frame = self.video.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
         for (x, y, w, h) in faces:
